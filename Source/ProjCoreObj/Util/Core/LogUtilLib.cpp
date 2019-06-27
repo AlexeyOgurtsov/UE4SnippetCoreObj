@@ -68,7 +68,7 @@ void ULogUtilLib::LogObjectSafeIf(bool const bInShouldLog, const UObject* const 
 		{
 			M_LOG_ERROR(TEXT("Object is invalid Low-level RECURSIVE (IsValidLowLevelFast(true) returned false)"));
 		}
-		if( (InFlags & EMyLogObjectFlags::FullGroupName) != EMyLogObjectFlags::FullGroupName )
+		if( (InFlags & EMyLogObjectFlags::FullGroupName) != EMyLogObjectFlags::None )
 		{
 			M_LOG(TEXT("FullGroupName: {%s}"), *InObject->GetFullGroupName(/*bStartWithOuter*/true));
 		}
