@@ -2,6 +2,7 @@
 
 #include "MyDebugMacros.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "TextProperty.h"
 #include "LogUtilLib.generated.h"
 
 UENUM(BlueprintType)
@@ -79,9 +80,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyFloat(const FString& InKey, float InValue);
 
-	static void LogDouble(const FString& InKey, double InDouble);
-	static void LogDoubleIf(bool bInShouldLog, const FString& InKey, double InDouble);
-	static void LogDoubleIfFlags(ELogFlags InFlags, const FString& InKey, double InDouble);
+	static void LogDouble(const FString& InKey, double InValue);
+	static void LogDoubleIf(bool bInShouldLog, const FString& InKey, double InValue);
+	static void LogDoubleIfFlags(ELogFlags InFlags, const FString& InKey, double InValue);
 
 	static FString GetKeyDouble(const FString& InKey, double InValue);
 
@@ -109,19 +110,17 @@ public:
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyString(const FString& InKey, const FString& InValue);
 
-	// @TODO: Undeclared identifier UTextProperty {
-		//UFUNCTION(BlueprintCallable, Category = Log)
-		//static void LogText(const FString& InKey, const FText& InValue);
+	UFUNCTION(BlueprintCallable, Category = Log)
+	static void LogText(const FString& InKey, const FText& InValue);
 
-		//UFUNCTION(BlueprintCallable, Category = Log)
-		//static void LogTextIf(bool bInShouldLog, const FString& InKey, const FText& InValue);
+	UFUNCTION(BlueprintCallable, Category = Log)
+	static void LogTextIf(bool bInShouldLog, const FString& InKey, const FText& InValue);
 
-		//UFUNCTION(BlueprintCallable, Category = Log)
-		//static void LogTextIfFlags(ELogFlags InLogFlags, const FString& InKey, const FText& InValue);
+	UFUNCTION(BlueprintCallable, Category = Log)
+	static void LogTextIfFlags(ELogFlags InLogFlags, const FString& InKey, const FText& InValue);
 
-		//UFUNCTION(BlueprintPure, Category = Log)
-		//static FString GetKeyText(const FString& InKey, const FText& InValue);
-	// }
+	UFUNCTION(BlueprintPure, Category = Log)
+	static FString GetKeyText(const FString& InKey, const FText& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogName(const FString& InKey, const FName& InValue);
