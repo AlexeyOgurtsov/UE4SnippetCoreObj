@@ -26,9 +26,16 @@ bool FLogObjectUntilInvalidLatentCommand::Update()
 	bool const bAlwaysLog = (Flags & ELogObjectCommandFlags::AlwaysLog) != ELogObjectCommandFlags::None;
 	bool const bObjectInvalid = (false == ObjectToLog->IsValidLowLevel());
 
+	double const SecondsElapsed = GetSecondsElapsed();
+	bool const bTimeOver = IsTimeOver();
+
 	// ~bShouldLog calculation Begin
 	bool bShouldLog = false;
 	if(bAlwaysLog)
+	{
+		bShouldLog = true;
+	}
+	else if(bTimeOver)
 	{
 		bShouldLog = true;
 	}
@@ -54,11 +61,33 @@ bool FLogObjectUntilInvalidLatentCommand::Update()
 	{
 		return true; // Stop
 	}
-	if(MaxIters.IsSet() && UpdateIndex == MaxIters.GetValue())
+	else if(IsTimeOver())
+	{
+		M_LOG(TEXT("***** STOPPED because time over (%lf seconds elapsed, time quota is %s))"), SecondsElapsed, (MaxSeconds.IsSet() ? *FString::SanitizeFloat(MaxSeconds.GetValue()) : *FString(TEXT("No quota"))));
+		return true;
+	}
+	else if(MaxIters.IsSet() && UpdateIndex == MaxIters.GetValue())
 	{
 		M_LOG(TEXT("**** STOPPED because max iters gained"));
 		return true;
 	}
 	LastObjectState.UpdateFrom(ObjectToLog);
 	return false;
+}
+
+bool FLogObjectUntilInvalidLatentCommand::IsTimeOver() const
+{
+	if(MaxSeconds.IsSet())
+	{
+		return (GetSecondsElapsed() >= MaxSeconds.GetValue());
+	}
+	else
+	{
+		return false;
+	}
+}
+
+double FLogObjectUntilInvalidLatentCommand::GetSecondsElapsed() const
+{
+	return FPlatformTime::Seconds() - StartTime;
 }

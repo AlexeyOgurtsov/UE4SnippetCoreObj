@@ -34,6 +34,31 @@ FString ULogUtilLib::GetNameAndClassScoped(const UObject* const InObject)
 	return Result;
 }
 
+FString ULogUtilLib::GetKeyedNameAndClass(const FString& InKey, const UObject* const InObject)
+{
+	return GetKeyedNameAndClassC(*InKey, InObject);
+}
+
+FString ULogUtilLib::GetKeyedNameAndClassC(const TCHAR* InKey, const UObject* const InObject)
+{
+	return FString::Printf(TEXT("%s : %s"), InKey, *GetNameAndClassScoped(InObject)); 
+}
+
+void ULogUtilLib::LogNameClassSafe(const UObject* const InObject)
+{
+	M_LOG(TEXT("%s"), *GetNameAndClassSafe(InObject));
+}
+
+void ULogUtilLib::LogKeyedNameClassSafe(const FString& InKey, const UObject* const InObject)
+{
+	LogKeyedNameClassSafeC(*InKey, InObject);
+}
+
+void ULogUtilLib::LogKeyedNameClassSafeC(const TCHAR* InKey, const UObject* const InObject)
+{
+	M_LOG(TEXT("%s"), *GetKeyedNameAndClassC(InKey, InObject));
+}
+
 FString ULogUtilLib::GetYesNo(bool const bYes)
 {
 	return bYes ? FString(TEXT("YES")) : FString(TEXT("no"));
@@ -41,141 +66,315 @@ FString ULogUtilLib::GetYesNo(bool const bYes)
 
 FString ULogUtilLib::GetKeyYesNo(const FString& InKey, bool const bInValue)
 {
-	return FString::Printf(TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+	return GetKeyYesNoC(*InKey, bInValue);
+}
+
+FString ULogUtilLib::GetKeyYesNoC(const TCHAR* const InKey, bool const bInValue)
+{
+	return FString::Printf(TEXT("%s : %s"), InKey, *GetYesNo(bInValue));
 }
 
 void ULogUtilLib::LogYesNo(const FString& InKey, bool const bInValue)
 {
-	M_LOG(TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+	return LogYesNoC(*InKey, bInValue);
+}
+
+void ULogUtilLib::LogYesNoC(const TCHAR* const InKey, bool const bInValue)
+{
+	M_LOG(TEXT("%s : %s"), InKey, *GetYesNo(bInValue));
 }
 
 void ULogUtilLib::LogYesNoIf(bool const bInShouldLog, const FString& InKey, bool const bInValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+	return LogYesNoIfC(bInShouldLog, *InKey, bInValue);
+}
+
+void ULogUtilLib::LogYesNoIfC(bool const bInShouldLog, const TCHAR* const InKey, bool const bInValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %s"), InKey, *GetYesNo(bInValue));
 }
 
 void ULogUtilLib::LogYesNoIfFlags(ELogFlags const InLogFlags, const FString& InKey, bool const bInValue)
 {
-	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+	return LogYesNoIfFlagsC(InLogFlags, *InKey, bInValue);
+}
+
+void ULogUtilLib::LogYesNoIfFlagsC(ELogFlags const InLogFlags, const TCHAR* const InKey, bool const bInValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : %s"), InKey, *GetYesNo(bInValue));
 }
 
 void ULogUtilLib::LogFloat(const FString& InKey, float const InValue)
 {
-	M_LOG(TEXT("%s : %f"), *InKey, InValue);
+	LogFloatC(*InKey, InValue);
+}
+
+void ULogUtilLib::LogFloatC(const TCHAR* const InKey, float const InValue)
+{
+	M_LOG(TEXT("%s : %f"), InKey, InValue);
+}
+
+void ULogUtilLib::LogFloatIfC(bool const bInShouldLog, const TCHAR* const InKey, float const InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %f"), InKey, InValue);
 }
 
 void ULogUtilLib::LogFloatIf(bool const bInShouldLog, const FString& InKey, float const InValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : %f"), *InKey, InValue);
+	LogFloatIfC(bInShouldLog, *InKey, InValue);
+}
+
+void ULogUtilLib::LogFloatIfFlagsC(ELogFlags const InFlags, const TCHAR* const InKey, float const InValue)
+{
+	M_LOG_IF_FLAGS(InFlags, TEXT("%s : %f"), InKey, InValue);
 }
 
 void ULogUtilLib::LogFloatIfFlags(ELogFlags const InFlags, const FString& InKey, float const InValue)
 {
-	M_LOG_IF_FLAGS(InFlags, TEXT("%s : %f"), *InKey, InValue);
+	LogFloatIfFlagsC(InFlags, *InKey, InValue);
 }
 
 FString ULogUtilLib::GetKeyFloat(const FString& InKey, float const InValue)
 {
-	return FString::Printf(TEXT("%s : %f"), *InKey, InValue);
+	return GetKeyFloatC(*InKey, InValue);
 }
 
+FString ULogUtilLib::GetKeyFloatC(const TCHAR* const InKey, float const InValue)
+{
+	return FString::Printf(TEXT("%s : %f"), InKey, InValue);
+}
 void ULogUtilLib::LogDouble(const FString& InKey, double const InValue)
 {
-	M_LOG(TEXT("%s : %lf"), *InKey, InValue);
+	LogDoubleC(*InKey, InValue);
+}
+
+void ULogUtilLib::LogDoubleC(const TCHAR* const InKey, double const InValue)
+{
+	M_LOG(TEXT("%s : %lf"), InKey, InValue);
 }
 
 void ULogUtilLib::LogDoubleIf(bool const bInShouldLog, const FString& InKey, double const InValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : %lf"), *InKey, InValue);
+	LogDoubleIfC(bInShouldLog, *InKey, InValue);
+}
+
+void ULogUtilLib::LogDoubleIfC(bool const bInShouldLog, const TCHAR* const InKey, double const InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %lf"), InKey, InValue);
 }
 
 void ULogUtilLib::LogDoubleIfFlags(ELogFlags const InFlags, const FString& InKey, double const InValue)
 {
-	M_LOG_IF_FLAGS(InFlags, TEXT("%s : %lf"), *InKey, InValue);
+	LogDoubleIfFlagsC(InFlags, *InKey, InValue);
+}
+
+void ULogUtilLib::LogDoubleIfFlagsC(ELogFlags const InFlags, const TCHAR* const InKey, double const InValue)
+{
+	M_LOG_IF_FLAGS(InFlags, TEXT("%s : %lf"), InKey, InValue);
 }
 
 FString ULogUtilLib::GetKeyDouble(const FString& InKey, double const InValue)
 {
-	return FString::Printf(TEXT("%s : %lf"), *InKey, InValue);
+	return GetKeyDoubleC(*InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyDoubleC(const TCHAR* const InKey, double const InValue)
+{
+	return FString::Printf(TEXT("%s : %lf"), InKey, InValue);
 }
 
 void ULogUtilLib::LogInt32(const FString& InKey, int32 const InValue)
 {
-	M_LOG(TEXT("%s : %d"), *InKey, InValue);
+	LogInt32C(*InKey, InValue);
+}
+
+void ULogUtilLib::LogInt32C(const TCHAR* const InKey, int32 const InValue)
+{
+	M_LOG(TEXT("%s : %d"), InKey, InValue);
 }
 
 void ULogUtilLib::LogInt32If(bool const bInShouldLog, const FString& InKey, int32 const InValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : %d"), *InKey, InValue);
+	LogInt32IfC(bInShouldLog, *InKey, InValue);
+}
+
+void ULogUtilLib::LogInt32IfC(bool const bInShouldLog, const TCHAR* InKey, int32 const InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %d"), InKey, InValue);
 }
 
 void ULogUtilLib::LogInt32IfFlags(ELogFlags const InLogFlags, const FString& InKey, int32 const InValue)
 {
-	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : %d"), *InKey, InValue);
+	LogInt32IfFlagsC(InLogFlags, *InKey, InValue);
+}
+
+void ULogUtilLib::LogInt32IfFlagsC(ELogFlags const InLogFlags, const TCHAR* const InKey, int32 const InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : %d"), InKey, InValue);
 }
 
 FString ULogUtilLib::GetKeyInt32(const FString& InKey, int32 InValue)
 {
-	return FString::Printf(TEXT("%s : %d"), *InKey, InValue);
+	return GetKeyInt32C(*InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyInt32C(const TCHAR* const InKey, int32 InValue)
+{
+	return FString::Printf(TEXT("%s : %d"), InKey, InValue);
 }
 
 void ULogUtilLib::LogString(const FString& InKey, const FString& InValue)
 {
-	M_LOG(TEXT("%s : \"%s\""), *InKey, *InValue);
+	LogCString(InKey, *InValue);
+}
+void ULogUtilLib::LogStringC(const TCHAR* const InKey, const FString& InValue)
+{
+	LogCStringC(InKey, *InValue);
 }
 void ULogUtilLib::LogStringIf(bool const bInShouldLog, const FString& InKey, const FString& InValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), *InKey, *InValue);
+	LogCStringIf(bInShouldLog, InKey, *InValue);
 }
 
+void ULogUtilLib::LogStringIfC(bool const bInShouldLog, const TCHAR* const InKey, const FString& InValue)
+{
+	LogCStringIfC(bInShouldLog, InKey, *InValue);
+}
 void ULogUtilLib::LogStringIfFlags(ELogFlags const InLogFlags, const FString& InKey, const FString& InValue)
 {
-	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), *InKey, *InValue);
+	LogCStringIfFlags(InLogFlags, InKey, *InValue);
 }
 
+void ULogUtilLib::LogStringIfFlagsC(ELogFlags const InLogFlags, const TCHAR* const InKey, const FString& InValue)
+{
+	LogCStringIfFlagsC(InLogFlags, InKey, *InValue);
+}
+void ULogUtilLib::LogCString(const FString& InKey, const TCHAR* InValue)
+{
+	LogCStringC(*InKey, InValue);
+}
+
+void ULogUtilLib::LogCStringC(const TCHAR* const InKey, const TCHAR* InValue)
+{
+	M_LOG(TEXT("%s : \"%s\""), InKey, InValue);
+
+}
+void ULogUtilLib::LogCStringIf(bool bInShouldLog, const FString& InKey, const TCHAR* const InValue)
+{
+	LogCStringIfC(bInShouldLog, *InKey, InValue);
+}
+
+void ULogUtilLib::LogCStringIfC(bool bInShouldLog, const TCHAR* const InKey, const TCHAR* const InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), InKey, InValue);
+}
+void ULogUtilLib::LogCStringIfFlags(ELogFlags InLogFlags, const FString& InKey, const TCHAR* const InValue)
+{
+	LogCStringIfFlagsC(InLogFlags, *InKey, InValue);
+}
+
+void ULogUtilLib::LogCStringIfFlagsC(ELogFlags InLogFlags, const TCHAR* const InKey, const TCHAR* const InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyCString(const FString& InKey, const TCHAR* const InValue)
+{
+	return GetKeyCStringC(*InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyCStringC(const TCHAR* const InKey, const TCHAR* const InValue)
+{
+	return FString::Printf(TEXT("%s : \"%s\""), InKey, InValue);
+}
 FString ULogUtilLib::GetKeyString(const FString& InKey, const FString& InValue)
 {
-	return FString::Printf(TEXT("%s : \"%s\""), *InKey, *InValue);
+	return GetKeyCString(InKey, *InValue);
+}
+
+FString ULogUtilLib::GetKeyStringC(const TCHAR* const InKey, const FString& InValue)
+{
+	return GetKeyCStringC(InKey, *InValue);
 }
 
 void ULogUtilLib::LogText(const FString& InKey, const FText& InValue)
 {
-	M_LOG(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	LogTextC(*InKey, InValue);
+}
+
+void ULogUtilLib::LogTextC(const TCHAR* const InKey, const FText& InValue)
+{
+	M_LOG(TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 void ULogUtilLib::LogTextIf(bool const bInShouldLog, const FString& InKey, const FText& InValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	LogTextIfC(bInShouldLog, *InKey, InValue);
+}
+
+void ULogUtilLib::LogTextIfC(bool const bInShouldLog, const TCHAR* const InKey, const FText& InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 void ULogUtilLib::LogTextIfFlags(ELogFlags const InLogFlags, const FString& InKey, const FText& InValue)
 {
-	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	LogTextIfFlagsC(InLogFlags, *InKey, InValue);
 }
  
+void ULogUtilLib::LogTextIfFlagsC(ELogFlags const InLogFlags, const TCHAR* const InKey, const FText& InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), InKey, *InValue.ToString());
+}
+
 FString ULogUtilLib::GetKeyText(const FString& InKey, const FText& InValue)
 {
-	FString::Printf(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	return GetKeyTextC(*InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyTextC(const TCHAR* const InKey, const FText& InValue)
+{
+	return FString::Printf(TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 void ULogUtilLib::LogName(const FString& InKey, const FName& InValue)
 {
-	M_LOG(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	LogNameC(*InKey, InValue);
+}
+
+void ULogUtilLib::LogNameC(const TCHAR* const InKey, const FName& InValue)
+{
+	M_LOG(TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 void ULogUtilLib::LogNameIf(bool const bInShouldLog, const FString& InKey, const FName& InValue)
 {
-	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	LogNameIfC(bInShouldLog, *InKey, InValue);
+}
+
+void ULogUtilLib::LogNameIfC(bool const bInShouldLog, const TCHAR* const InKey, const FName& InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 void ULogUtilLib::LogNameIfFlags(ELogFlags const InLogFlags, const FString& InKey, const FName& InValue)
 {
-	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	LogNameIfFlagsC(InLogFlags, *InKey, InValue);
+}
+
+void ULogUtilLib::LogNameIfFlagsC(ELogFlags const InLogFlags, const TCHAR* const InKey, const FName& InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 FString ULogUtilLib::GetKeyName(const FString& InKey, const FName& InValue)
 {
-	return FString::Printf(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	return GetKeyNameC(*InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyNameC(const TCHAR* const InKey, const FName& InValue)
+{
+	return FString::Printf(TEXT("%s : \"%s\""), InKey, *InValue.ToString());
 }
 
 void ULogUtilLib::LogObjectSafe(const UObject* const InObject, EMyLogObjectFlags const InFlags)

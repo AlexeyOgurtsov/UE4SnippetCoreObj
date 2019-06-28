@@ -52,87 +52,135 @@ public:
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetNameAndClassScoped(const UObject* InObject);
 
+	UFUNCTION(BlueprintPure, Category = Log)
+	static FString GetKeyedNameAndClass(const FString& InKey, const UObject* InObject);
+	static FString GetKeyedNameAndClassC(const TCHAR* InKey, const UObject* InObject);
+
 	// ~Value logging Begin
+	UFUNCTION(BlueprintCallable, Category = Log)
+	static void LogNameClassSafe(const UObject* InObject);
+
+	UFUNCTION(BlueprintCallable, Category = Log)
+	static void LogKeyedNameClassSafe(const FString& InKey, const UObject* InObject);
+	static void LogKeyedNameClassSafeC(const TCHAR* InKey, const UObject* InObject);
+	
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetYesNo(bool bYes);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyYesNo(const FString& InKey, bool bInValue);
+	static FString GetKeyYesNoC(const TCHAR* InKey, bool bInValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogYesNo(const FString& InKey, bool bInValue);
+	static void LogYesNoC(const TCHAR* InKey, bool bInValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogYesNoIf(bool bInShouldLog, const FString& InKey, bool bInValue);
+	static void LogYesNoIfC(bool bInShouldLog, const TCHAR* InKey, bool bInValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogYesNoIfFlags(ELogFlags InLogFlags, const FString& InKey, bool bInValue);
+	static void LogYesNoIfFlagsC(ELogFlags InLogFlags, const TCHAR* InKey, bool bInValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogFloat(const FString& InKey, float InValue);
+	static void LogFloatC(const TCHAR* InKey, float InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogFloatIf(bool bInShouldLog, const FString& InKey, float InValue);
+	static void LogFloatIfC(bool bInShouldLog, const TCHAR* InKey, float InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogFloatIfFlags(ELogFlags InFlags, const FString& InKey, float InValue);
+	static void LogFloatIfFlagsC(ELogFlags InFlags, const TCHAR* InKey, float InValue);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyFloat(const FString& InKey, float InValue);
+	static FString GetKeyFloatC(const TCHAR* InKey, float InValue);
 
 	static void LogDouble(const FString& InKey, double InValue);
+	static void LogDoubleC(const TCHAR* InKey, double InValue);
 	static void LogDoubleIf(bool bInShouldLog, const FString& InKey, double InValue);
+	static void LogDoubleIfC(bool bInShouldLog, const TCHAR* InKey, double InValue);
 	static void LogDoubleIfFlags(ELogFlags InFlags, const FString& InKey, double InValue);
+	static void LogDoubleIfFlagsC(ELogFlags InFlags, const TCHAR* InKey, double InValue);
 
 	static FString GetKeyDouble(const FString& InKey, double InValue);
+	static FString GetKeyDoubleC(const TCHAR* InKey, double InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogInt32(const FString& InKey, int32 InValue);
+	static void LogInt32C(const TCHAR* InKey, int32 InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogInt32If(bool bInShouldLog, const FString& InKey, int32 InValue);
+	static void LogInt32IfC(bool bInShouldLog, const TCHAR* InKey, int32 InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogInt32IfFlags(ELogFlags InLogFlags, const FString& InKey, int32 InValue);
+	static void LogInt32IfFlagsC(ELogFlags InLogFlags, const TCHAR* InKey, int32 InValue);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyInt32(const FString& InKey, int32 InValue);
+	static FString GetKeyInt32C(const TCHAR* InKey, int32 InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogString(const FString& InKey, const FString& InValue);
+	static void LogStringC(const TCHAR* InKey, const FString& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogStringIf(bool bInShouldLog, const FString& InKey, const FString& InValue);
+	static void LogStringIfC(bool bInShouldLog, const TCHAR* InKey, const FString& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogStringIfFlags(ELogFlags InLogFlags, const FString& InKey, const FString& InValue);
+	static void LogStringIfFlagsC(ELogFlags InLogFlags, const TCHAR* InKey, const FString& InValue);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyString(const FString& InKey, const FString& InValue);
+	static FString GetKeyStringC(const TCHAR* InKey, const FString& InValue);
+	
+	static void LogCString(const FString& InKey, const TCHAR* InValue);
+	static void LogCStringC(const TCHAR* InKey, const TCHAR* InValue);
+	static void LogCStringIf(bool bInShouldLog, const FString& InKey, const TCHAR* InValue);
+	static void LogCStringIfC(bool bInShouldLog, const TCHAR* InKey, const TCHAR* InValue);
+	static void LogCStringIfFlags(ELogFlags InLogFlags, const FString& InKey, const TCHAR* InValue);
+	static void LogCStringIfFlagsC(ELogFlags InLogFlags, const TCHAR* InKey, const TCHAR* InValue);
+	static FString GetKeyCString(const FString& InKey, const TCHAR* InValue);
+	static FString GetKeyCStringC(const TCHAR* InKey, const TCHAR* InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogText(const FString& InKey, const FText& InValue);
+	static void LogTextC(const TCHAR* InKey, const FText& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogTextIf(bool bInShouldLog, const FString& InKey, const FText& InValue);
+	static void LogTextIfC(bool bInShouldLog, const TCHAR* InKey, const FText& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogTextIfFlags(ELogFlags InLogFlags, const FString& InKey, const FText& InValue);
+	static void LogTextIfFlagsC(ELogFlags InLogFlags, const TCHAR* InKey, const FText& InValue);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyText(const FString& InKey, const FText& InValue);
+	static FString GetKeyTextC(const TCHAR* InKey, const FText& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogName(const FString& InKey, const FName& InValue);
+	static void LogNameC(const TCHAR* InKey, const FName& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogNameIf(bool bInShouldLog, const FString& InKey, const FName& InValue);
+	static void LogNameIfC(bool bInShouldLog, const TCHAR* InKey, const FName& InValue);
 
 	UFUNCTION(BlueprintCallable, Category = Log)
 	static void LogNameIfFlags(ELogFlags InLogFlags, const FString& InKey, const FName& InValue);
+	static void LogNameIfFlagsC(ELogFlags InLogFlags, const TCHAR* InKey, const FName& InValue);
 
 	UFUNCTION(BlueprintPure, Category = Log)
 	static FString GetKeyName(const FString& InKey, const FName& InValue);
+	static FString GetKeyNameC(const TCHAR* InKey, const FName& InValue);
 	// ~Value logging End
 	
 	UFUNCTION(BlueprintCallable, Category = Log)

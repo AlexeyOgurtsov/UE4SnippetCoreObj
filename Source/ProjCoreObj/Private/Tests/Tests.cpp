@@ -12,6 +12,56 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectAddToRoot, "MyTests.Object.AddToRo
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestQuickEditor, "MyTests.QuickEditor", EAutomationTestFlags::SmokeFilter | EAutomationTestFlags::EditorContext);
 // ~Single object tests End
 
+// ~Package tests Begin
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestPackage_Transient, "MyTests.Package.Transient", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext | EAutomationTestFlags::HighPriorityAndAbove);
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestPackage_CustomPackage, "MyTests.Package.CustomPackage", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext | EAutomationTestFlags::HighPriorityAndAbove);
+// ~Package Tests End
+
+bool FMyTestPackage_Transient::RunTest(const FString& Parameters)
+{
+	M_LOGFUNC();
+	{
+		M_LOGBLOCK(TEXT("******************* Logging transient package"));
+		ULogUtilLib::LogObjectSafe(GetTransientPackage(), EMyLogObjectFlags::Full);
+	}
+	return true;
+}
+
+bool FMyTestPackage_CustomPackage::RunTest(const FString& Parameters)
+{
+	M_LOGFUNC();
+
+	UPackage* MyPackage = nullptr;
+	
+	{
+		M_LOGBLOCK(TEXT("******************* Create custom package"));
+		MyPackage = CreatePackage(nullptr, nullptr);
+	}
+
+	{
+		M_LOGBLOCK(TEXT("******************* Logging custom package"));
+		ULogUtilLib::LogObjectSafe(MyPackage, EMyLogObjectFlags::Full);
+	}
+
+	{
+		M_LOGBLOCK(TEXT("******************* Issuing command for checking state of the package"));
+		ADD_LATENT_AUTOMATION_COMMAND(FLogObjectUntilInvalidLatentCommand{MyPackage});
+	}
+
+	UObject* MyObj = nullptr;
+	{
+		M_LOGBLOCK(TEXT("***************** Creating UObject inside MyPackage"));
+		MyObj = NewObject<UMyObject>(MyPackage);
+	}
+
+	{
+		M_LOGBLOCK(TEXT("***************** Issuing command for checking UObject"))
+		ADD_LATENT_AUTOMATION_COMMAND(FLogObjectUntilInvalidLatentCommand{MyObj});
+	}
+
+	return true;
+}
+
 bool FMyTestObjectMarkPendingKill::RunTest(const FString& Parameters)
 {
 	M_LOGFUNC();
@@ -62,6 +112,7 @@ bool FMyTestObjectAddToRoot::RunTest(const FString& Parameters)
 
 	{
 		M_LOGBLOCK(TEXT("******************** Remove from root"));
+		// What will be if we forgot to remove object from Root?
 		Obj->RemoveFromRoot();
 		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
 	}
@@ -72,10 +123,7 @@ bool FMyTestObjectCreate::RunTest(const FString& Parameters)
 {
 	M_LOGFUNC();
 
-	{
-		M_LOGBLOCK(TEXT("******************* Logging transient package"));
-		ULogUtilLib::LogObjectSafe(GetTransientPackage(), EMyLogObjectFlags::Full);
-	}
+	
 
 	{
 		M_LOGBLOCK(TEXT("******************* Create UObject in transient package"));

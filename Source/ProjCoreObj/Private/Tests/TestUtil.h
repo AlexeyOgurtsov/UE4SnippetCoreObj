@@ -2,6 +2,7 @@
 
 #include "Misc/AutomationTest.h"
 #include "UObject/ObjectMacros.h"
+#include "GenericPlatform/GenericPlatformTime.h"
 
 class UObject;
 
@@ -30,8 +31,11 @@ struct FMyObjectState
 class FLogObjectUntilInvalidLatentCommand : public IAutomationLatentCommand
 {
 public:
-	FLogObjectUntilInvalidLatentCommand(const UObject* InObjectToLog, ELogObjectCommandFlags InFlags = ELogObjectCommandFlags::Default, TOptional<int32> InMaxIters = TOptional<int32>()) 
-	: ObjectToLog{InObjectToLog}
+	FLogObjectUntilInvalidLatentCommand(const UObject* InObjectToLog, ELogObjectCommandFlags InFlags = ELogObjectCommandFlags::Default, TOptional<double> InMaxSeconds = 60.0, TOptional<int32> InMaxIters = 5000) 
+	: StartTime {FPlatformTime::Seconds()}
+	, MaxSeconds{InMaxSeconds}
+	, UpdateIndex{0}
+	, ObjectToLog{InObjectToLog}
 	, MaxIters{InMaxIters}
 	, Flags{InFlags}
 	, LastObjectState{InObjectToLog}
@@ -42,8 +46,15 @@ public:
 	bool Update() override;
 
 private:
+	double GetSecondsElapsed() const;
+	bool IsTimeOver() const;
+
+	double StartTime;
+	TOptional<double> MaxSeconds;
+
+	int32 UpdateIndex;
+
 	const UObject* ObjectToLog;
-	int32 UpdateIndex = 0;
 	TOptional<int32> MaxIters;
 	ELogObjectCommandFlags Flags;
 	FMyObjectState LastObjectState;
