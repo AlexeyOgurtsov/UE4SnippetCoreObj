@@ -8,6 +8,7 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectCreate, "MyTests.Object.Create", E
 
 // ~Single object tests Begin
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectMarkPendingKill, "MyTests.Object.MarkPendingKill", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext);
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectAddToRoot, "MyTests.Object.AddToRoot", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext);
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestQuickEditor, "MyTests.QuickEditor", EAutomationTestFlags::SmokeFilter | EAutomationTestFlags::EditorContext);
 // ~Single object tests End
 
@@ -26,12 +27,45 @@ bool FMyTestObjectMarkPendingKill::RunTest(const FString& Parameters)
 
 		M_LOGBLOCK(TEXT("******************** Marking pending kill"));
 		Obj->MarkPendingKill();
+		ULogUtilLib::LogYesNo(FString(TEXT("IsPendingKill")), Obj->IsPendingKill());
 		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
 	}
 
 	{
 		ADD_LATENT_AUTOMATION_COMMAND(FLogObjectUntilInvalidLatentCommand{Obj});
 	}
+	return true;
+}
+
+bool FMyTestObjectAddToRoot::RunTest(const FString& Parameters)
+{
+	M_LOGFUNC();
+
+	UObject* Obj = nullptr;
+	{
+		M_LOGBLOCK(TEXT("******************** Logging object creation"));
+		Obj = NewObject<UMyObject>(GetTransientPackage());
+		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
+	}
+
+	{
+
+		M_LOGBLOCK(TEXT("******************** Add to root"));
+		Obj->AddToRoot();
+		ULogUtilLib::LogYesNo(FString(TEXT("IsRoot")), Obj->IsRoot());
+		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
+	}
+
+	{
+		ADD_LATENT_AUTOMATION_COMMAND(FLogObjectUntilInvalidLatentCommand{Obj});
+	}
+
+	{
+		M_LOGBLOCK(TEXT("******************** Remove from root"));
+		Obj->RemoveFromRoot();
+		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
+	}
+	return true;
 }
 
 bool FMyTestObjectCreate::RunTest(const FString& Parameters)

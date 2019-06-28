@@ -23,12 +23,10 @@ bool FMyObjectState::HasStateChanged(const UObject* InObject)
 
 bool FLogObjectUntilInvalidLatentCommand::Update()
 {
-	M_LOG(TEXT("**** Waiting until object is invalid"));
-	M_LOG(TEXT("**** UpdateIndex=%d"), UpdateIndex);
-
 	bool const bAlwaysLog = (Flags & ELogObjectCommandFlags::AlwaysLog) != ELogObjectCommandFlags::None;
 	bool const bObjectInvalid = (false == ObjectToLog->IsValidLowLevel());
 
+	// ~bShouldLog calculation Begin
 	bool bShouldLog = false;
 	if(bAlwaysLog)
 	{
@@ -46,6 +44,11 @@ bool FLogObjectUntilInvalidLatentCommand::Update()
 	{
 		ULogUtilLib::LogObjectSafe(ObjectToLog, EMyLogObjectFlags::Full);
 	}
+	// ~bShouldLog calcuation End
+
+	M_LOG_IF(bShouldLog, TEXT("**** Waiting until object is invalid"));
+	M_LOG_IF(bShouldLog, TEXT("**** UpdateIndex=%d"), UpdateIndex);
+
 	UpdateIndex++;
 	if(bObjectInvalid)
 	{

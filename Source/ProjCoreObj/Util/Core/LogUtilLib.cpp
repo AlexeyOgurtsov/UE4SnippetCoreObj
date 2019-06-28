@@ -39,6 +39,147 @@ FString ULogUtilLib::GetYesNo(bool const bYes)
 	return bYes ? FString(TEXT("YES")) : FString(TEXT("no"));
 }
 
+FString ULogUtilLib::GetKeyYesNo(const FString& InKey, bool const bInValue)
+{
+	return FString::Printf(TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+}
+
+void ULogUtilLib::LogYesNo(const FString& InKey, bool const bInValue)
+{
+	M_LOG(TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+}
+
+void ULogUtilLib::LogYesNoIf(bool const bInShouldLog, const FString& InKey, bool const bInValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+}
+
+void ULogUtilLib::LogYesNoIfFlags(ELogFlags const InLogFlags, const FString& InKey, bool const bInValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : %s"), *InKey, *GetYesNo(bInValue));
+}
+
+void ULogUtilLib::LogFloat(const FString& InKey, float const InValue)
+{
+	M_LOG(TEXT("%s : %f"), *InKey, InValue);
+}
+
+void ULogUtilLib::LogFloatIf(bool const bInShouldLog, const FString& InKey, float const InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %f"), *InKey, InValue);
+}
+
+void ULogUtilLib::LogFloatIfFlags(ELogFlags const InFlags, const FString& InKey, float const InValue)
+{
+	M_LOG_IF_FLAGS(InFlags, TEXT("%s : %f"), *InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyFloat(const FString& InKey, float const InValue)
+{
+	return FString::Printf(TEXT("%s : %f"), *InKey, InValue);
+}
+
+void ULogUtilLib::LogDouble(const FString& InKey, double const InDouble)
+{
+	M_NOT_IMPL();
+}
+
+void ULogUtilLib::LogDoubleIf(bool const bInShouldLog, const FString& InKey, double const InDouble)
+{
+	M_NOT_IMPL();
+}
+
+void ULogUtilLib::LogDoubleIfFlags(ELogFlags const InFlags, const FString& InKey, double const InDouble)
+{
+	M_NOT_IMPL();
+}
+
+FString ULogUtilLib::GetKeyDouble(const FString& InKey, double const InValue)
+{
+	M_NOT_IMPL_RET(FString(TEXT("Double")));
+}
+
+void ULogUtilLib::LogInt32(const FString& InKey, int32 const InValue)
+{
+	M_LOG(TEXT("%s : %d"), *InKey, InValue);
+}
+
+void ULogUtilLib::LogInt32If(bool const bInShouldLog, const FString& InKey, int32 const InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : %d"), *InKey, InValue);
+}
+
+void ULogUtilLib::LogInt32IfFlags(ELogFlags const InLogFlags, const FString& InKey, int32 const InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : %d"), *InKey, InValue);
+}
+
+FString ULogUtilLib::GetKeyInt32(const FString& InKey, int32 InValue)
+{
+	return FString::Printf(TEXT("%s : %d"), *InKey, InValue);
+}
+
+void ULogUtilLib::LogString(const FString& InKey, const FString& InValue)
+{
+	M_LOG(TEXT("%s : \"%s\""), *InKey, *InValue);
+}
+void ULogUtilLib::LogStringIf(bool const bInShouldLog, const FString& InKey, const FString& InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), *InKey, *InValue);
+}
+
+void ULogUtilLib::LogStringIfFlags(ELogFlags const InLogFlags, const FString& InKey, const FString& InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), *InKey, *InValue);
+}
+
+FString ULogUtilLib::GetKeyString(const FString& InKey, const FString& InValue)
+{
+	return FString::Printf(TEXT("%s : \"%s\""), *InKey, *InValue);
+}
+
+// @TODO: Undeclared identifier UTextProperty {
+	//void ULogUtilLib::LogText(const FString& InKey, const FText& InValue)
+	//{
+	//	M_LOG(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	//}
+	//
+	//void ULogUtilLib::LogTextIf(bool const bInShouldLog, const FString& InKey, const FText& InValue)
+	//{
+	//	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	//}
+	//
+	//void ULogUtilLib::LogTextIfFlags(ELogFlags const InLogFlags, const FString& InKey, const FText& InValue)
+	//{
+	//	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	//}
+	// 
+	//FString ULogUtilLib::GetKeyText(const FString& InKey, const FText& InValue)
+	//{
+	//	FString::Printf(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+	//}
+//}
+
+void ULogUtilLib::LogName(const FString& InKey, const FName& InValue)
+{
+	M_LOG(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+}
+
+void ULogUtilLib::LogNameIf(bool const bInShouldLog, const FString& InKey, const FName& InValue)
+{
+	M_LOG_IF(bInShouldLog, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+}
+
+void ULogUtilLib::LogNameIfFlags(ELogFlags const InLogFlags, const FString& InKey, const FName& InValue)
+{
+	M_LOG_IF_FLAGS(InLogFlags, TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+}
+
+FString ULogUtilLib::GetKeyName(const FString& InKey, const FName& InValue)
+{
+	return FString::Printf(TEXT("%s : \"%s\""), *InKey, *InValue.ToString());
+}
+
 void ULogUtilLib::LogObjectSafe(const UObject* const InObject, EMyLogObjectFlags const InFlags)
 {
 	return LogObjectSafeIf(true, InObject, InFlags);
