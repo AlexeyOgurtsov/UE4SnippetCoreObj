@@ -68,5 +68,3 @@ public:
 	static FString GetObjectFlagsString(EObjectFlags InFlags);
 	static FString GetObjectFlagsStringScoped(EObjectFlags InFlags);
 };
-
-// ~Logging macros End

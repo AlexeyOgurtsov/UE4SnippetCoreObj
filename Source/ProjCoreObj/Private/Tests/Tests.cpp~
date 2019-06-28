@@ -1,33 +1,60 @@
-#include "Misc/AutomationTest.h"
-#include "Util/Core/LogUtilLib.h"
-
 #include "Testee/MyObject.h"
+#include "TestUtil.h"
+#include "Util/Core/LogUtilLib.h"
 
 #include <UObject/Package.h>
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectCreate, "MyTests.Object.Create", EAutomationTestFlags::SmokeFilter | EAutomationTestFlags::EditorContext);
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectCreate, "MyTests.Object.Create", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext);
+
+// ~Single object tests Begin
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestObjectMarkPendingKill, "MyTests.Object.MarkPendingKill", EAutomationTestFlags::EngineFilter | EAutomationTestFlags::EditorContext);
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FMyTestQuickEditor, "MyTests.QuickEditor", EAutomationTestFlags::SmokeFilter | EAutomationTestFlags::EditorContext);
+// ~Single object tests End
+
+bool FMyTestObjectMarkPendingKill::RunTest(const FString& Parameters)
+{
+	M_LOGFUNC();
+
+	UObject* Obj = nullptr;
+	{
+		M_LOGBLOCK(TEXT("******************** Logging object creation"));
+		Obj = NewObject<UMyObject>(GetTransientPackage());
+		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
+	}
+
+	{
+
+		M_LOGBLOCK(TEXT("******************** Marking pending kill"));
+		Obj->MarkPendingKill();
+		ULogUtilLib::LogObjectSafe(Obj, EMyLogObjectFlags::Full);
+	}
+
+	{
+		ADD_LATENT_AUTOMATION_COMMAND(FLogObjectUntilInvalidLatentCommand{Obj});
+	}
+}
 
 bool FMyTestObjectCreate::RunTest(const FString& Parameters)
 {
 	M_LOGFUNC();
 
 	{
-		M_LOGBLOCK(TEXT("Log nullptr UObject"));
-		ULogUtilLib::LogObjectSafe(nullptr);
+		M_LOGBLOCK(TEXT("******************* Logging transient package"));
+		ULogUtilLib::LogObjectSafe(GetTransientPackage(), EMyLogObjectFlags::Full);
 	}
 
 	{
-		M_LOGBLOCK(TEXT("Create UObject in transient package"));
+		M_LOGBLOCK(TEXT("******************* Create UObject in transient package"));
 		UObject* const MyObj_InTransientPackage = NewObject<UMyObject>(GetTransientPackage());
-		{
-			M_LOGBLOCK(TEXT("Full logging"));
-			ULogUtilLib::LogObjectSafe(MyObj_InTransientPackage, EMyLogObjectFlags::Full);
-		}
 		{
 			M_LOGBLOCK(TEXT("Default logging"));
 			ULogUtilLib::LogObjectSafe(MyObj_InTransientPackage, EMyLogObjectFlags::Default);
 		}
+		{
+			M_LOGBLOCK(TEXT("Full logging"));
+			ULogUtilLib::LogObjectSafe(MyObj_InTransientPackage, EMyLogObjectFlags::Full);
+		}
+		ADD_LATENT_AUTOMATION_COMMAND(FLogObjectUntilInvalidLatentCommand{MyObj_InTransientPackage});
 	}
 
 	return true;
